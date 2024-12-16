@@ -4,7 +4,7 @@ const router = express.Router();
 const slugify = require('slugify')
 
 router.get("/admin/categories/new", (req, res) => {
-    res.render('admin/categories/new')
+    res.render('admin/categories/newCategory')
 });
 
 router.post("/categories/save", (req, res) => {
