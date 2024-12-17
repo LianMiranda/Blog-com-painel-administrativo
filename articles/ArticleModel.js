@@ -16,7 +16,8 @@ const Article = connection.define('articles', {
     }
 })
 
-Category.hasMany(Article) ////Metodo hasMany() é para criar um relacionamento 1-p-n
+Category.hasMany(Article) //Metodo hasMany() é para criar um relacionamento 1-p-n
 Article.belongsTo(Category) //Metodo belongsTo() é para criar um relacionamento 1-p-1
+
 
 module.exports = Article
