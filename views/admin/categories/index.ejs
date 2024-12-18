@@ -1,7 +1,7 @@
 <%- include ('../../partials/header.ejs') %>
 
 <body>
-    <%- include ('../../partials/navbar.ejs') %>
+    <%- include ('../../partials/navbarAdmin.ejs') %>
     
     <div class="container pt-3">
         <h2>Categorias</h2>
@@ -18,16 +18,16 @@
             <tbody>
                 <% categories.forEach(category => { %>
                     <tr>
-                        <th><%= category.id %></th>
-                        <th><%= category.title %></th>
-                        <th><%= category.slug %></th>
-                        <th class="gap-2 d-flex">
+                        <td><%= category.id %></td>
+                        <td><%= category.title %></td>
+                        <td><%= category.slug %></td>
+                        <td class="gap-2 d-flex">
                             <a  class="btn btn-warning" href="/admin/categories/edit/<%= category.id%>">Editar</a>
-                            <form method="POST" action="/categories/delete" onsubmit="confirmDelete(event, this)">  
+                            <form method="POST" action="/categories/delete" onsubmit="confirmDelete(event, tdis)">  
                                 <input type="hidden" name="id" value="<%= category.id  %>">
                                 <button class="btn btn-danger">Deletar</button>
                             </form>
-                        </th>
+                        </td>
                     </tr>
                 <% }) %>
             </tbody>

@@ -5,7 +5,11 @@ const articleModel = require("./ArticleModel")
 const slugify = require("slugify")
 
 router.get('/admin/articles', (req, res) => {
-    res.send('PAGINA DE ARTIGOS')
+    articleModel.findAll({
+        include: [{model: categoryModel}] //incluir os dados do tipo categoryModel na busca
+    }).then(articles => {
+        res.render('admin/articles/index', {articles: articles})
+    })
 })
 
 router.get('/admin/articles/new', (req, res) => {
@@ -31,8 +35,23 @@ router.post("/articles/save", (req, res) => {
     }).then(() => {
         res.redirect("/admin/articles")
     })
+})
 
-
+router.post('/articles/delete', (req,res) => {
+    var id = req.body.id;
+    if(id){
+        if(!isNaN(id)){
+            articleModel.destroy({
+                where: {id: id}
+            }).then(() =>{
+                 res.redirect("/admin/articles");
+            })
+        }else{
+            res.redirect("/admin/articles");
+        }
+    }else{
+        res.redirect("/admin/articles");
+    }
 })
 
 module.exports = router
