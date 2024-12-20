@@ -44,7 +44,9 @@ app.get("/:slug", (req,res) => {
         }
     }).then(article => {
         if(article != undefined){
-          res.render("article", {article: article});
+            categoryModel.findAll().then(categories => {
+                res.render("article", {article: article, categories: categories});
+            })
         }else{
             res.redirect("/");
         } 
@@ -53,6 +55,28 @@ app.get("/:slug", (req,res) => {
     })
 })
 
+app.get('/category/:slug', (req, res) => {
+    var slug = req.params.slug;
+
+    categoryModel.findOne({
+        where:{
+           slug: slug
+        }, 
+        include:[
+            {model: articleModel} //incluindo artigos q fazem parte da categoria
+        ]
+    }).then(category =>{
+        if(category){
+            categoryModel.findAll().then(categories =>{
+                res.render("index", {articles: category.articles, categories: categories})
+            })
+        }else{
+            res.redirect("/")
+        }
+    }).catch(err => {
+        res.redirect("/")
+    })
+})
 app.listen(3000, ()=>{
     console.log("Servidor rodando na porta 3000");
 });

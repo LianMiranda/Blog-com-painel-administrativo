@@ -22,7 +22,7 @@
                     <td><%= article.id %></td>
                     <td><%= article.title %></td>
                     <td><%= article.slug %></td>
-                    <td><%= article.category.title %></td>
+                    <td><%= article.category ? article.category.title : "Sem categoria" %></td>
                     <td>
                         <form action="/articles/delete" method="post" onsubmit="confirmDelete(event, this)">
                             <input type="hidden" name="id" value="<%= article.id %>">
