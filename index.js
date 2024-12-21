@@ -32,7 +32,9 @@ app.use("/", articlesController);
 //Routes   
 app.get("/", (req, res) => {
     articleModel.findAll().then((articles) =>{
-        res.render("index", {articles: articles});
+        categoryModel.findAll().then((categories) => {
+            res.render("index", {articles: articles, categories: categories});
+        })
     })
 });
 

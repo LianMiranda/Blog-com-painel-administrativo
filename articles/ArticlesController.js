@@ -54,4 +54,50 @@ router.post('/articles/delete', (req,res) => {
     }
 })
 
+router.get("/admin/articles/update/:id", (req, res) => {
+    var id = req.params.id;
+    
+    if(isNaN(id)){
+        res.redirect("/admin/articles");
+    }
+
+    articleModel.findByPk(id).then(article => {
+        if(article){
+            categoryModel.findAll().then((categories) => {
+                res.render("admin/articles/editArticle", {article: article, categories: categories})
+            })
+        }else{
+            res.redirect("/admin/articles");
+        }
+    }).catch(err => {
+        res.redirect("/admin/articles");
+    })
+})
+
+router.post('/articles/update', (req,res) => {
+    var id = req.body.id
+    var body = req.body.body
+    var title = req.body.title
+    var categoryId = req.body.category
+
+    console.log("ID:", id);
+    console.log("Title:", title);
+
+    if (!id || !title) {
+        return res.status(400).send("ID e título são obrigatórios.");
+    }
+
+    articleModel.update({title: title, body: body, slug: slugify(title), categoryId: categoryId}, {
+        where:{
+            id: id
+        }
+    }).then(() => {
+        res.redirect('/')
+    }) .catch((err) => {
+            console.error("Erro ao atualizar o artigo:", err);
+            res.status(500).send("Erro interno do servidor.");
+    });
+})
+
+
 module.exports = router
