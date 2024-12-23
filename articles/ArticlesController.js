@@ -78,7 +78,7 @@ router.post('/articles/update', (req,res) => {
     var id = req.body.id
     var body = req.body.body
     var title = req.body.title
-    var categoryId = req.body.category
+    var category = req.body.category
 
     console.log("ID:", id);
     console.log("Title:", title);
@@ -87,7 +87,7 @@ router.post('/articles/update', (req,res) => {
         return res.status(400).send("ID e título são obrigatórios.");
     }
 
-    articleModel.update({title: title, body: body, slug: slugify(title), categoryId: categoryId}, {
+    articleModel.update({title: title, body: body, slug: slugify(title), categoryId: category}, {
         where:{
             id: id
         }
@@ -99,5 +99,39 @@ router.post('/articles/update', (req,res) => {
     });
 })
 
+//sistema de paginação
+router.get("/articles/page/:num", (req, res) => {
+    var page = req.params.num
+    var offset =  0
 
+    if(isNaN(page) || page == 1){
+        offset = 0
+    }else {
+        offset = (parseInt(page) - 1) * 4;
+    }
+
+    articleModel.findAndCountAll({
+        limit: 4,
+        offset: offset,
+        order:[["createdAt", "DESC"]],
+    }).then(articles => {
+
+        var next; // verifica se a outra pagina a ser exibida no sistema de paginação
+
+        if(offset + 4 >= articles.count){
+            next = false;
+        }else {
+            next = true;
+        }
+        var result = {
+            page: parseInt(page),
+            next: next,
+            articles:articles
+        }
+
+        categoryModel.findAll().then(categories => {
+            res.render('admin/articles/page', {result: result, categories: categories})
+        })
+    })
+})
 module.exports = router

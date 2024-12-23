@@ -1,0 +1,38 @@
+<%- include ('../../partials/header.ejs') %>
+
+    <body>
+        <%- include('../../partials/navbarHome.ejs') %>  
+        <div class="container">
+            <!-- quando trabalhamos com findAndCountAll ele retorna count e rows, por isso o result.articles.rows  -->
+               <% result.articles.rows.forEach(article =>{ %>
+                   <div class="card mb-3">
+                       <div class="card-header">
+                           <%= article.title %>
+                       </div>
+                       <div class="card-body">
+                           <a href="/<%=article.slug%>" class="btn btn-primary">Ler artigo</a>
+                       </div>
+                   </div>
+              <% }) %>
+
+              <div class="row">
+                <div class="col col-12">
+                    <% if (result.page > 2) { %>
+                      <a style="float:left" href="/articles/page/<%= result.page -  1 %>"><- Prev</a>
+                    <% } else if (result.page == 2) { %>
+                        <a style="float:left" href="/"><- Prev</a>
+                    <% } %>
+                         
+                     
+                   
+
+                    <% if (result.next) { %>   
+                        <a style="float:right" href="/articles/page/<%= result.page + 1 %>">Next Page -></a>
+                    <% } %>
+                </div>    
+               </div>
+        </div>
+    </body>
+
+
+<%- include ('../../partials/footer.ejs') %>
