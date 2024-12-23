@@ -5,9 +5,12 @@ const connection = require('./database/database');
 
 const categoriesController = require("./categories/CategoriesController");
 const articlesController = require("./articles/ArticlesController")
+const userController = require("./user/UserController");
 
 const categoryModel = require("./categories/CategoryModel")
 const articleModel = require("./articles/ArticleModel")
+const userModel = require("./user/UserModel")
+
 
 //View engine 
 app.set('view engine', 'ejs');
@@ -28,6 +31,7 @@ connection.authenticate().then(() =>{
 
 app.use("/", categoriesController);
 app.use("/", articlesController);
+app.use("/", userController);
 
 //Routes   
 app.get("/", (req, res) => {
