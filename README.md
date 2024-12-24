@@ -9,6 +9,7 @@ Este é um projeto de um blog com painel administrativo, desenvolvido em Node.js
 - **Bootstrap**
 - **TinyMCE**
 - **Slugify**
+- **BcryptJS**
 
 A aplicação permite criar, editar e deletar posts, além de gerenciar usuários e categorias pelo painel administrativo.
 
