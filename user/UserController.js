@@ -15,7 +15,7 @@ router.get('/admin/users', adminAuth, (req, res) =>{
     })
 })
 
-router.get("/admin/users/create", (req, res) =>{
+router.get("/singUp", (req, res) =>{
     var message = null;
     res.render('admin/users/create.ejs', { message });
 })

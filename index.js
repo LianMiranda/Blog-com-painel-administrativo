@@ -87,7 +87,7 @@ app.get('/category/:slug', (req, res) => {
     }).then(category =>{
         if(category){
             categoryModel.findAll().then(categories =>{
-                res.render("index", {articles: category.articles, categories: categories})
+                res.render("home", {articles: category.articles, categories: categories})
             })
         }else{
             res.redirect("/")
