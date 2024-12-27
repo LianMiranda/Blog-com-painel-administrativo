@@ -3,8 +3,10 @@ const router = express.Router();
 const categoryModel = require("../categories/CategoryModel")
 const articleModel = require("./ArticleModel")
 const slugify = require("slugify")
+const adminAuth = require("../middlewares/adminAuth")
 
-router.get('/admin/articles', (req, res) => {
+
+router.get('/admin/articles', adminAuth,(req, res) => {
     articleModel.findAll({
         include: [{model: categoryModel}] //incluir os dados do tipo categoryModel na busca
     }).then(articles => {
@@ -12,7 +14,7 @@ router.get('/admin/articles', (req, res) => {
     })
 })
 
-router.get('/admin/articles/new', (req, res) => {
+router.get('/admin/articles/new', adminAuth,(req, res) => {
     categoryModel.findAll().then(categories => {
         res.render('admin/articles/newArticle', {categories: categories})
     })
@@ -54,7 +56,7 @@ router.post('/articles/delete', (req,res) => {
     }
 })
 
-router.get("/admin/articles/update/:id", (req, res) => {
+router.get("/admin/articles/update/:id", adminAuth, (req, res) => {
     var id = req.params.id;
     
     if(isNaN(id)){
