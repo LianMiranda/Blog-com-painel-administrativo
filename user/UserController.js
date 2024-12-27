@@ -4,7 +4,9 @@ const userModel = require('./UserModel')
 const bcrypt = require('bcryptjs')
 
 router.get('/admin/users', (req, res) =>{
-    res.send('Usuarios')
+    userModel.findAll().then(users => {
+        res.render("admin/users/users.ejs", {users: users})
+    })
 })
 
 router.get("/admin/users/create", (req, res) =>{
@@ -31,7 +33,7 @@ router.post("/users/create", (req, res) => {
                 console.log(err);
             }) 
         }else{
-            res.render('admin/users/create.ejs', { message });
+            res.render('admin/users/create', { message });
         }
     })
 })
