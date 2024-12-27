@@ -23,6 +23,7 @@ app.use(session({
     cookie: {maxAge: 30000000}
 }))
 
+
 //Static
 app.use(express.static('public'))
 
@@ -49,7 +50,7 @@ app.get("/", (req, res) => {
         limit: 4
     }).then((articles) =>{
         categoryModel.findAll().then((categories) => {
-            res.render("index", {articles: articles, categories: categories});
+            res.render("home", {articles: articles, categories: categories});
         })
     })
 });

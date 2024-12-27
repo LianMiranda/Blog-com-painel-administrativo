@@ -21,8 +21,11 @@ router.get("/admin/users/create", (req, res) =>{
 })
 
 router.post("/users/create", (req, res) => {
+    var username = req.body.username
     var email = req.body.email
     var password = req.body.password
+    var userType = req.body.userType
+
     var message = 'Usuário já cadastrado com esse email!';
 
     userModel.findOne({where: {email: email}}).then(user =>{
@@ -31,8 +34,10 @@ router.post("/users/create", (req, res) => {
             var hash = bcrypt.hashSync(password, salt)
 
             userModel.create({
+                username: username,
                 email: email,
-                password: hash
+                password: hash,
+                profileId: parseInt(userType)
             }).then(() => {
                 res.redirect("/")
             }).catch((err) => {
@@ -64,9 +69,17 @@ router.post("/auth", (req, res) => {
             if(validPassword){
                 req.session.user ={
                     id: user.id,
-                    email: user.email
+                    email: user.email,
+                    profileId: user.profileId
                 }
-                res.redirect("/admin/articles")
+                if (req.session.user) {
+                    console.log(req.session.user); // Informações armazenadas na sessão
+                }
+                if(user.profileId == 1){
+                    res.redirect("/admin/articles")
+                }else{
+                    res.redirect("/")
+                }
             }else{
                 res.render('admin/users/login', { message: null, invalidPasswordMessage});
             }
@@ -74,11 +87,12 @@ router.post("/auth", (req, res) => {
             res.render('admin/users/login', {message, invalidPasswordMessage: null});
         }
     })
+
 });
 
 router.get('/notAdm', (req, res) => {
     categoryModel.findAll().then(categories => {
-        res.render('notAdmin', {categories: categories});
+        res.render('warnings/notAdmin', {categories: categories});
     })
 })
 
