@@ -5,7 +5,7 @@
     
     <div class="container">
         <h2>Artigos</h2>
-        <a class="btn btn-primary mt-3" href="/admin/articles/new">Criar novo artigo</a>
+        <a class="btn btn-primary mt-3" href="articles/new">Criar novo artigo</a>
         <table class="table table-dark table-striped mt-3">
             <thead>
                 <tr>
@@ -24,7 +24,7 @@
                     <td><%= article.slug %></td>
                     <td><%= article.category ? article.category.title : "Sem categoria" %></td>
                     <td class="d-flex gap-2  lign-items-center">
-                        <a class="btn btn-warning" href="/admin/articles/update/<%= article.id %>">Editar</a>
+                        <a class="btn btn-warning" href="articles/update/<%= article.id %>">Editar</a>
                         <form action="/articles/delete" method="post" onsubmit="confirmDelete(event, this)">
                             <input type="hidden" name="id" value="<%= article.id %>">
                             <button class="btn btn-danger">Deletar</button>

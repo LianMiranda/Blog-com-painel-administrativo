@@ -45,18 +45,22 @@ app.use("/", userController);
 
 //Routes   
 app.get("/", (req, res) => {
+    const user = req.session.user; 
+
     articleModel.findAll({
         order:[["createdAt", "DESC"]],
         limit: 4
     }).then((articles) =>{
         categoryModel.findAll().then((categories) => {
-            res.render("home", {articles: articles, categories: categories});
+            res.render("home", {articles: articles, categories: categories, user: user});
         })
     })
 });
 
 app.get("/:slug", (req,res) => {
     var slug = req.params.slug;
+    var user = req.session.user;
+
     articleModel.findOne({
         where:{
             slug:slug
@@ -64,7 +68,7 @@ app.get("/:slug", (req,res) => {
     }).then(article => {
         if(article != undefined){
             categoryModel.findAll().then(categories => {
-                res.render("article", {article: article, categories: categories});
+                res.render("article", {article: article, categories: categories, user:user});
             })
         }else{
             res.redirect("/");
@@ -76,6 +80,7 @@ app.get("/:slug", (req,res) => {
 
 app.get('/category/:slug', (req, res) => {
     var slug = req.params.slug;
+    var user = req.session.user; 
 
     categoryModel.findOne({
         where:{
@@ -87,7 +92,7 @@ app.get('/category/:slug', (req, res) => {
     }).then(category =>{
         if(category){
             categoryModel.findAll().then(categories =>{
-                res.render("home", {articles: category.articles, categories: categories})
+                res.render("home", {articles: category.articles, categories: categories, user: user})
             })
         }else{
             res.redirect("/")

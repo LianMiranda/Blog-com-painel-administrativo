@@ -4,7 +4,9 @@ const userModel = require('./UserModel')
 const bcrypt = require('bcryptjs');
 const { where } = require('sequelize'); 
 const categoryModel = require('../categories/CategoryModel');
-const adminAuth = require("../middlewares/adminAuth")
+const adminAuth = require("../middlewares/adminAuth");
+const articleModel = require('../articles/ArticleModel');
+
 
 router.get('/admin/users', adminAuth, (req, res) =>{
     if(!req.session.user){
@@ -99,6 +101,23 @@ router.get('/notAdm', (req, res) => {
 router.get("/logout", (req, res) => {
     req.session.user = undefined;
     res.redirect("/")
+    console.log(req.session.user);
+    
+})
+
+router.get("/myArticles", (req, res) =>{
+
+    if(!req.session.user){
+        res.redirect("/login")
+    }
+
+    const user = req.session.user;
+    
+    articleModel.findAll({where: {userId: user.id}}).then(articles =>{
+        categoryModel.findAll().then(categories => {
+            res.render("admin/users/myArticles", {articles: articles, categories: categories, user: user})
+        })
+    })
 })
 
 module.exports = router

@@ -10,12 +10,14 @@
                 <th>Id</th>
                 <th>Usuario</th>
                 <th>Email</th>
+                <th>Perfil</th>
             </thead>
             <% users.forEach(user => { %>
                 <tbody>
                     <td><%= user.id %></td>
                     <td><%= user.username %></td>
                     <td><%= user.email %></td>
+                    <td><%= user.profileId == 1 ? 'Admin' : 'User'  %></td>
                 </tbody>
             <% }) %>
            

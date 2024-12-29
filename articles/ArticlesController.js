@@ -4,6 +4,7 @@ const categoryModel = require("../categories/CategoryModel")
 const articleModel = require("./ArticleModel")
 const slugify = require("slugify")
 const adminAuth = require("../middlewares/adminAuth")
+const userAuth = require("../middlewares/userAuth")
 
 
 router.get('/admin/articles', adminAuth,(req, res) => {
@@ -14,9 +15,10 @@ router.get('/admin/articles', adminAuth,(req, res) => {
     })
 })
 
-router.get('/admin/articles/new', adminAuth,(req, res) => {
+router.get('/articles/new', userAuth, (req, res) => {
+    const user = req.session.user.id
     categoryModel.findAll().then(categories => {
-        res.render('admin/articles/newArticle', {categories: categories})
+        res.render('admin/articles/newArticle', {categories: categories, user: user})
     })
 })
 
@@ -24,6 +26,9 @@ router.post("/articles/save", (req, res) => {
     var title = req.body.articleTitle;
     var body = req.body.body;
     var category = req.body.category;
+
+    const sessionUserId = req.session.user.id;
+    const formUserId = parseInt(req.body.userId, 10);
 
     if (!title || typeof title !== "string" || title.trim() === "") {
         return res.status(400).send("O título do artigo é obrigatório!.");
@@ -33,9 +38,10 @@ router.post("/articles/save", (req, res) => {
         title: title,
         slug: slugify(title.toString()),
         body: body,
-        categoryId: category
+        categoryId: category,
+        userId: formUserId
     }).then(() => {
-        res.redirect("/admin/articles")
+        res.redirect("/myArticles")
     })
 })
 
@@ -56,7 +62,7 @@ router.post('/articles/delete', (req,res) => {
     }
 })
 
-router.get("/admin/articles/update/:id", adminAuth, (req, res) => {
+router.get("articles/update/:id", userAuth, (req, res) => {
     var id = req.params.id;
     
     if(isNaN(id)){
@@ -105,6 +111,7 @@ router.post('/articles/update', (req,res) => {
 router.get("/articles/page/:num", (req, res) => {
     var page = req.params.num
     var offset =  0
+    var user = req.session.user
 
     if(isNaN(page) || page == 1){
         offset = 0
@@ -132,7 +139,7 @@ router.get("/articles/page/:num", (req, res) => {
         }
 
         categoryModel.findAll().then(categories => {
-            res.render('admin/articles/page', {result: result, categories: categories})
+            res.render('admin/articles/page', {result: result, categories: categories, user: user})
         })
     })
 })

@@ -12,6 +12,7 @@
                 <form method="post" action="/articles/save">
                     <input class="form-control mb-3" type="text" name="articleTitle" placeholder="Defina o titulo do artigo" required>
                     <textarea class="form-control" name="body" placeholder="Escreva o artigo aqui!" id="body"></textarea>
+                    <input type="hidden" name="userId" value="<%= user %>">
                     <label class="mt-3">Categoria</label>
                     <select name="category" class="form-control mt-2">
                         <% categories.forEach((category) => {  %>
