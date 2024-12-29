@@ -59,16 +59,17 @@ app.get("/", (req, res) => {
 
 app.get("/:slug", (req,res) => {
     var slug = req.params.slug;
-    var user = req.session.user;
 
     articleModel.findOne({
         where:{
             slug:slug
         }
     }).then(article => {
-        if(article != undefined){
+        if(article){
             categoryModel.findAll().then(categories => {
-                res.render("article", {article: article, categories: categories, user:user});
+                userModel.findOne({where:{ id: article.userId}}).then(user =>{
+                    res.render("article", {article: article, categories: categories,user: user});
+                })
             })
         }else{
             res.redirect("/");

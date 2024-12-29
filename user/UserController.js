@@ -71,6 +71,7 @@ router.post("/auth", (req, res) => {
             if(validPassword){
                 req.session.user ={
                     id: user.id,
+                    username: user.username,
                     email: user.email,
                     profileId: user.profileId
                 }

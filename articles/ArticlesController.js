@@ -16,7 +16,8 @@ router.get('/admin/articles', adminAuth,(req, res) => {
 })
 
 router.get('/articles/new', userAuth, (req, res) => {
-    const user = req.session.user.id
+    const user = req.session.user
+
     categoryModel.findAll().then(categories => {
         res.render('admin/articles/newArticle', {categories: categories, user: user})
     })
@@ -27,7 +28,6 @@ router.post("/articles/save", (req, res) => {
     var body = req.body.body;
     var category = req.body.category;
 
-    const sessionUserId = req.session.user.id;
     const formUserId = parseInt(req.body.userId, 10);
 
     if (!title || typeof title !== "string" || title.trim() === "") {
@@ -52,28 +52,34 @@ router.post('/articles/delete', (req,res) => {
             articleModel.destroy({
                 where: {id: id}
             }).then(() =>{
-                 res.redirect("/admin/articles");
+                 res.redirect("/myArticles");
             })
         }else{
-            res.redirect("/admin/articles");
+            res.redirect("/myArticles");
         }
     }else{
-        res.redirect("/admin/articles");
+        res.redirect("/myArticles");
     }
 })
 
-router.get("articles/update/:id", userAuth, (req, res) => {
+router.get("/articles/update/:id", userAuth, (req, res) => {
     var id = req.params.id;
-    
+    var user = req.session.user;
+
     if(isNaN(id)){
         res.redirect("/admin/articles");
     }
 
     articleModel.findByPk(id).then(article => {
         if(article){
-            categoryModel.findAll().then((categories) => {
-                res.render("admin/articles/editArticle", {article: article, categories: categories})
-            })
+            if(user.id == article.userId){
+                categoryModel.findAll().then((categories) => {
+                    res.render("admin/articles/editArticle", {article: article, categories: categories})
+                })
+            }else{
+                res.render("warnings/notAutor");
+            }
+        
         }else{
             res.redirect("/admin/articles");
         }

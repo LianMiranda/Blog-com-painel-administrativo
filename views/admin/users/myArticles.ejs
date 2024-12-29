@@ -12,13 +12,29 @@
                     <div class="card-header">
                         <%= article.title %>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body d-flex gap-3">
                         <a href="/<%=article.slug%>" class="btn btn-primary">Ler artigo</a>
+                        <a class="btn btn-warning" href="/articles/update/<%= article.id %>">Editar artigo</a>
+                        <form action="/articles/delete" method="post" onsubmit="confirmDelete(event, this)">
+                            <input type="hidden" name="id" value="<%= article.id %>">
+                            <button class="btn btn-danger">Deletar artigo</button>
+                        </form>
                     </div>
                 </div>
            <% }) %>
         </div>
     </body>
 
+    <script>
+        function confirmDelete(event, form){
+            event.preventDefault(); //Para impedir a submissao do form   
+            var decision = confirm("Deseja deletar este artigo ?");
+            if(decision){
+                form.submit();
+            }else{
+               console.log("Não cancelou");      
+            }
+        }   
+    </script>
 
 <%- include ('../../partials/footer.ejs') %>
