@@ -12,6 +12,8 @@ const categoryModel = require("./categories/CategoryModel")
 const articleModel = require("./articles/ArticleModel")
 const userModel = require("./user/UserModel")
 
+const dotenv = require('dotenv').config()
+
 
 //View engine 
 app.set('view engine', 'ejs');
@@ -19,7 +21,7 @@ app.set('view engine', 'ejs');
 
 //Session '
 app.use(session({
-    secret: "chave-secreta",
+    secret: process.env.SECRET_KEY,
     cookie: {maxAge: 30000000}
 }))
 
@@ -52,13 +54,14 @@ app.get("/", (req, res) => {
         limit: 4
     }).then((articles) =>{
         categoryModel.findAll().then((categories) => {
-            res.render("home", {articles: articles, categories: categories, user: user});
+            res.render("home", {articles: articles, categories: categories, user: user,  isCategoryPage: false});
         })
     })
 });
 
 app.get("/:slug", (req,res) => {
     var slug = req.params.slug;
+    var user = req.session.user
 
     articleModel.findOne({
         where:{
@@ -67,8 +70,8 @@ app.get("/:slug", (req,res) => {
     }).then(article => {
         if(article){
             categoryModel.findAll().then(categories => {
-                userModel.findOne({where:{ id: article.userId}}).then(user =>{
-                    res.render("article", {article: article, categories: categories,user: user});
+                userModel.findOne({where:{ id: article.userId}}).then(autor =>{
+                    res.render("article", {article: article, categories: categories, autor: autor, user});
                 })
             })
         }else{
@@ -93,7 +96,7 @@ app.get('/category/:slug', (req, res) => {
     }).then(category =>{
         if(category){
             categoryModel.findAll().then(categories =>{
-                res.render("home", {articles: category.articles, categories: categories, user: user})
+                res.render("home", {articles: category.articles, categories: categories, user: user,  isCategoryPage: true})
             })
         }else{
             res.redirect("/")
@@ -102,6 +105,8 @@ app.get('/category/:slug', (req, res) => {
         res.redirect("/")
     })
 })
+
+
 app.listen(3000, ()=>{
     console.log("Servidor rodando na porta 3000");
 });

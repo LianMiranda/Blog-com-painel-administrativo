@@ -22,11 +22,13 @@
                 </div>
            <% }) %>
 
+           <% if (!isCategoryPage) { %>
            <div class="row m-3">
-            <div class="col col-12">
-                <a style="float: right" href="articles/page/2">Next Page -></a>
-            </div>    
-           </div>
+                <div class="col col-12">
+                    <a id="Next-Page" style="float: right" href="articles/page/2">Next Page -></a>
+                </div>    
+            </div>
+            <% } %>
         </div>
     </body>
 
