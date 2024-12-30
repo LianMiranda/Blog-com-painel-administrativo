@@ -38,11 +38,13 @@ Certifique-se de ter instalado em sua máquina as seguintes ferramentas:
    ```
 
 ## Executando o projeto
+1. Crie um banco de dados mysql e adicione as informações do banco de dados no arquivo database.js da pasta database 
 
-1. Para iniciar o servidor com o `nodemon` (útil durante o desenvolvimento, pois reinicia o servidor automaticamente em caso de alterações nos arquivos):
+
+2. Para iniciar o servidor com o `nodemon` (útil durante o desenvolvimento, pois reinicia o servidor automaticamente em caso de alterações nos arquivos):
    ```bash
    nodemon index.js
    ```
 
-2. Acesse a aplicação no navegador:
+3. Acesse a aplicação no navegador:
    - Por padrão, o servidor estará rodando no endereço: [http://localhost:3000](http://localhost:3000).
